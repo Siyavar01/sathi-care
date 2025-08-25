@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel';
 import bcrypt from 'bcryptjs';
+import generateToken from '../utils/generateToken';
 
 // @desc    Register a new user
 // @route   POST /api/users/register
@@ -36,6 +37,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -43,4 +45,26 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-export { registerUser };
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
+const loginUser = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user && user.password && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(401); // 401 Unauthorized is more appropriate here
+    throw new Error('Invalid credentials');
+  }
+});
+
+export { registerUser, loginUser };
