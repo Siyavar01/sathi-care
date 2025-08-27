@@ -62,9 +62,16 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(401); // 401 Unauthorized is more appropriate here
+    res.status(401);
     throw new Error('Invalid credentials');
   }
 });
 
-export { registerUser, loginUser };
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private
+const getMe = asyncHandler(async (req: Request, res: Response) => {
+  res.status(200).json(req.user);
+});
+
+export { registerUser, loginUser, getMe };
