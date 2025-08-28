@@ -4,6 +4,7 @@ import passport from 'passport';
 import connectDB from './config/db';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import professionalRoutes from './routes/professionalRoutes';
 import './config/passport';
 
 dotenv.config();
@@ -20,6 +21,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/professionals', professionalRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
