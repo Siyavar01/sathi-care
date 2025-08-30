@@ -3,14 +3,6 @@ import { Request, Response, NextFunction } from 'express';
 import asyncHandler from 'express-async-handler';
 import User, { IUser } from '../models/userModel';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser | null;
-    }
-  }
-}
-
 const protect = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     let token;
@@ -29,16 +21,15 @@ const protect = asyncHandler(
 
         const decoded = jwt.verify(token, secret) as JwtPayload;
 
-        const foundUser = (await User.findById(decoded.id).select(
-          '-password'
-        )) as IUser | null;
+        const foundUser = await User.findById(decoded.id).select('-password');
 
         if (!foundUser) {
           res.status(401);
           throw new Error('Not authorized, user not found');
         }
 
-        req.user = foundUser;
+        (req as any).user = foundUser;
+
         next();
       } catch (error) {
         res.status(401);
@@ -55,10 +46,12 @@ const protect = asyncHandler(
 
 const authorize = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    const user = (req as any).user as IUser;
+
+    if (!user || !roles.includes(user.role)) {
       res.status(403);
       throw new Error(
-        `User role ${req.user?.role} is not authorized to access this route`
+        `User role ${user?.role} is not authorized to access this route`
       );
     }
     next();

@@ -2,12 +2,12 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import Professional from '../models/professionalModel';
 import User, { IUser } from '../models/userModel';
+import ResponseModel from '../models/responseModel';
+import Question from '../models/questionnaireModel';
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser | null;
-    }
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: IUser | null;
   }
 }
 
@@ -30,7 +30,7 @@ const createOrUpdateProfessionalProfile = asyncHandler(
       throw new Error('Please provide all required fields');
     }
 
-    const user = req.user!;
+    const user = req.user as IUser;
 
     const profileFields = {
       user: user._id,
@@ -64,7 +64,8 @@ const createOrUpdateProfessionalProfile = asyncHandler(
 // @access  Private (Professional)
 const getMyProfessionalProfile = asyncHandler(
   async (req: Request, res: Response) => {
-    const profile = await Professional.findOne({ user: req.user!._id }).populate(
+    const user = req.user as IUser;
+    const profile = await Professional.findOne({ user: user._id }).populate(
       'user',
       ['name', 'email']
     );
@@ -91,8 +92,64 @@ const getAllProfessionals = asyncHandler(
   }
 );
 
+// @desc    Get matched professionals based on questionnaire
+// @route   POST /api/professionals/match
+// @access  Private
+const matchProfessionals = asyncHandler(async (req: Request, res: Response) => {
+  const { submissionId } = req.body;
+  const user = req.user as IUser;
+
+  if (!submissionId) {
+    res.status(400);
+    throw new Error('Submission ID is required');
+  }
+
+  const responses = await ResponseModel.find({
+    user: user._id,
+    submissionId,
+  }).populate({
+    path: 'question',
+    model: Question,
+  });
+
+  if (responses.length === 0) {
+    res.status(404);
+    throw new Error('No responses found for this submission ID');
+  }
+
+  const score: { [key: string]: number } = {};
+  responses.forEach((response: any) => {
+    const category = response.question.category;
+    const answer = response.answer;
+    let points = 0;
+    if (answer === 'Several days') points = 1;
+    if (answer === 'More than half the days') points = 2;
+    if (answer === 'Nearly every day') points = 3;
+
+    score[category] = (score[category] || 0) + points;
+  });
+
+  const primaryConcern = Object.keys(score).reduce((a, b) =>
+    score[a] > score[b] ? a : b
+  );
+
+  const professionals = await Professional.find({ isVerified: true });
+
+  const sortedProfessionals = [...professionals].sort((a, b) => {
+    const aHasSpecialization = a.specializations.includes(primaryConcern);
+    const bHasSpecialization = b.specializations.includes(primaryConcern);
+
+    if (aHasSpecialization && !bHasSpecialization) return -1;
+    if (!aHasSpecialization && bHasSpecialization) return 1;
+    return 0;
+  });
+
+  res.json({ primaryConcern, recommendations: sortedProfessionals });
+});
+
 export {
   createOrUpdateProfessionalProfile,
   getMyProfessionalProfile,
   getAllProfessionals,
+  matchProfessionals,
 };

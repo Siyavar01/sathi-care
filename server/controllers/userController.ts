@@ -1,8 +1,14 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import User from '../models/userModel';
+import User, { IUser } from '../models/userModel';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken';
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: IUser | null;
+  }
+}
 
 // @desc    Register a new user
 // @route   POST /api/users/register
