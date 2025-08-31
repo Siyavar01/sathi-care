@@ -1,13 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import passport from 'passport';
-import connectDB from './config/db';
-import userRoutes from './routes/userRoutes';
-import authRoutes from './routes/authRoutes';
-import professionalRoutes from './routes/professionalRoutes';
-import adminRoutes from './routes/adminRoutes';
-import questionnaireRoutes from './routes/questionnaireRoutes';
-import './config/passport';
+import connectDB from './config/db.ts';
+import userRoutes from './routes/userRoutes.ts';
+import authRoutes from './routes/authRoutes.ts';
+import professionalRoutes from './routes/professionalRoutes.ts';
+import adminRoutes from './routes/adminRoutes.ts';
+import questionnaireRoutes from './routes/questionnaireRoutes.ts';
+import './config/passport.ts';
 
 dotenv.config();
 
