@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.ts';
 import professionalRoutes from './routes/professionalRoutes.ts';
 import adminRoutes from './routes/adminRoutes.ts';
 import questionnaireRoutes from './routes/questionnaireRoutes.ts';
+import { errorHandler } from './middleware/errorMiddleware.ts';
 import './config/passport.ts';
 
 dotenv.config();
@@ -30,6 +31,8 @@ app.use('/api/questionnaire', questionnaireRoutes);
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
