@@ -1,22 +1,16 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import User, { IUser } from '../models/userModel';
+import User, { IUser } from '../models/userModel.ts';
 import bcrypt from 'bcryptjs';
-import generateToken from '../utils/generateToken';
-
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: IUser | null;
-  }
-}
+import generateToken from '../utils/generateToken.ts';
 
 // @desc    Register a new user
 // @route   POST /api/users/register
 // @access  Public
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !role) {
     res.status(400);
     throw new Error('Please add all fields');
   }
@@ -35,6 +29,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     name,
     email,
     password: hashedPassword,
+    role,
   });
 
   if (user) {
@@ -43,7 +38,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id),
+      token: generateToken(user._id.toString()),
     });
   } else {
     res.status(400);
@@ -65,7 +60,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id),
+      token: generateToken(user._id.toString()),
     });
   } else {
     res.status(401);
@@ -77,7 +72,8 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/users/me
 // @access  Private
 const getMe = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json(req.user);
+  const user = req.user as IUser;
+  res.status(200).json(user);
 });
 
 export { registerUser, loginUser, getMe };
