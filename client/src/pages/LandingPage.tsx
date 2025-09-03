@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import logoSrc from '../assets/logo-main.png';
 
 const LandingPage = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -42,12 +41,10 @@ const LandingPage = () => {
                 isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
               }`}
             >
-              <div className="flex items-center space-x-4">
-                <img
-                  src={logoSrc}
-                  alt="Sathi.care Logo"
-                  className="h-14 w-auto"
-                />
+              <div className="flex items-center">
+                <span className="text-4xl font-bold tracking-tight text-brand-charcoal">
+                  Sathi.care
+                </span>
               </div>
             </div>
 
@@ -71,10 +68,10 @@ const LandingPage = () => {
               }`}
             >
               <Link
-                to="/professionals"
+                to="/register/select-role"
                 className="inline-block rounded-lg bg-pastel-pink px-8 py-4 text-center text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:ring-offset-2"
               >
-                Explore Professionals
+                Get Started
               </Link>
             </div>
           </div>

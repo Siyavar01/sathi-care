@@ -50,7 +50,7 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    to="/register"
+                    to="/register/select-role"
                     className="rounded-lg bg-pastel-pink px-4 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-pastel-pink focus:ring-offset-2"
                   >
                     Register

@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import useAuthStore from '../features/auth/authSlice';
 import logoSrc from '../assets/logo-main.png';
 
-const RegisterPage = () => {
+const UserRegisterPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,7 +38,12 @@ const RegisterPage = () => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const userData = { name, email, password };
+    const userData = {
+      name,
+      email,
+      password,
+      role: 'user',
+    };
     register(userData);
   };
 
@@ -165,4 +170,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default UserRegisterPage;
