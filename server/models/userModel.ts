@@ -3,9 +3,10 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IUser extends Document {
   name: string;
   email: string;
-  password?: string; // Optional because it won't be sent back to the client
-  googleId?: string; // For Google OAuth
+  password?: string;
+  googleId?: string;
   role: 'user' | 'professional' | 'admin' | 'institution';
+  paymentGatewayCustomerId?: string;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -21,7 +22,6 @@ const userSchema: Schema<IUser> = new Schema(
     },
     password: {
       type: String,
-      // Not required because a user might sign up with Google OAuth
     },
     googleId: {
       type: String,
@@ -31,6 +31,9 @@ const userSchema: Schema<IUser> = new Schema(
       required: true,
       enum: ['user', 'professional', 'admin', 'institution'],
       default: 'user',
+    },
+    paymentGatewayCustomerId: {
+      type: String,
     },
   },
   {
