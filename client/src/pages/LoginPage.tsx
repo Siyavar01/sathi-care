@@ -22,7 +22,13 @@ const LoginPage = () => {
     }
 
     if (isSuccess || user) {
-      navigate('/');
+      if (user?.role === 'professional') {
+        navigate('/professional/profile');
+      } else if (user?.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     }
 
     reset();

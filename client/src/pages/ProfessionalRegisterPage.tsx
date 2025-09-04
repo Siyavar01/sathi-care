@@ -23,7 +23,7 @@ const ProfessionalRegisterPage = () => {
     }
 
     if (isSuccess || user) {
-      navigate('/');
+      navigate('/professional/profile');
     }
 
     reset();

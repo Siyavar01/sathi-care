@@ -7,6 +7,7 @@ import LandingPage from './pages/LandingPage.tsx';
 import AuthCallbackPage from './pages/AuthCallbackPage.tsx';
 import RoleSelectionPage from './pages/RoleSelectionPage.tsx';
 import ProfessionalRegisterPage from './pages/ProfessionalRegisterPage.tsx';
+import ProfessionalProfilePage from './pages/ProfessionalProfilePage.tsx';
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
           <Route
             path="/register/professional"
             element={<ProfessionalRegisterPage />}
+          />
+          <Route
+            path="/professional/profile"
+            element={<ProfessionalProfilePage />}
           />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
         </Routes>

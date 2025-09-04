@@ -5,7 +5,10 @@ import {
   getAllProfessionals,
   matchProfessionals,
 } from '../controllers/professionalController.ts';
-import { uploadCredential } from '../controllers/uploadController.ts';
+import {
+  uploadCredential,
+  uploadProfilePicture,
+} from '../controllers/uploadController.ts';
 import { protect } from '../middleware/authMiddleware.ts';
 import multer from 'multer';
 
@@ -19,6 +22,10 @@ router
   .post(protect, createOrUpdateProfessionalProfile);
 
 router.route('/profile/me').get(protect, getMyProfessionalProfile);
+
+router
+  .route('/profile/upload-picture')
+  .post(protect, upload.single('profilePicture'), uploadProfilePicture);
 
 router.route('/').get(getAllProfessionals);
 

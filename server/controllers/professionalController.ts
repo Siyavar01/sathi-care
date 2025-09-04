@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Professional from '../models/professionalModel';
-import User, { IUser } from '../models/userModel';
-import ResponseModel from '../models/responseModel';
-import Question from '../models/questionnaireModel';
+import Professional from '../models/professionalModel.ts';
+import User, { IUser } from '../models/userModel.ts';
+import ResponseModel from '../models/responseModel.ts';
+import Question from '../models/questionnaireModel.ts';
 
 declare module 'express-serve-static-core' {
   interface Request {
@@ -16,21 +16,24 @@ declare module 'express-serve-static-core' {
 // @access  Private (Professional)
 const createOrUpdateProfessionalProfile = asyncHandler(
   async (req: Request, res: Response) => {
-    const { title, bio, specializations, experience, languages, proBono } =
-      req.body;
-
-    if (
-      !title ||
-      !bio ||
-      !specializations ||
-      !experience ||
-      !languages
-    ) {
-      res.status(400);
-      throw new Error('Please provide all required fields');
-    }
+    const {
+      title,
+      bio,
+      specializations,
+      experience,
+      languages,
+      offersProBono,
+      acceptsInstitutionalOutreach,
+      sessionTypes,
+      availability,
+    } = req.body;
 
     const user = req.user as IUser;
+
+    if (!title || !bio || !specializations || !experience || !languages) {
+      res.status(400);
+      throw new Error('Please provide all required basic information fields');
+    }
 
     const profileFields = {
       user: user._id,
@@ -39,7 +42,10 @@ const createOrUpdateProfessionalProfile = asyncHandler(
       specializations,
       experience,
       languages,
-      proBono: proBono || false,
+      offersProBono,
+      acceptsInstitutionalOutreach,
+      sessionTypes,
+      availability,
     };
 
     let professionalProfile = await Professional.findOne({ user: user._id });
@@ -48,7 +54,7 @@ const createOrUpdateProfessionalProfile = asyncHandler(
       professionalProfile = await Professional.findOneAndUpdate(
         { user: user._id },
         { $set: profileFields },
-        { new: true }
+        { new: true, runValidators: true }
       );
     } else {
       professionalProfile = await Professional.create(profileFields);
