@@ -8,6 +8,8 @@ import AuthCallbackPage from './pages/AuthCallbackPage.tsx';
 import RoleSelectionPage from './pages/RoleSelectionPage.tsx';
 import ProfessionalRegisterPage from './pages/ProfessionalRegisterPage.tsx';
 import ProfessionalProfilePage from './pages/ProfessionalProfilePage.tsx';
+import AdminDashboardPage from './pages/AdminDashboardPage.tsx';
+import AdminRoute from './components/AdminRoute.tsx';
 
 function App() {
   return (
@@ -24,11 +26,16 @@ function App() {
             path="/register/professional"
             element={<ProfessionalRegisterPage />}
           />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+
           <Route
             path="/professional/profile"
             element={<ProfessionalProfilePage />}
           />
-          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+
+          <Route path="/admin" element={<AdminRoute />}>
+            <Route path="dashboard" element={<AdminDashboardPage />} />
+          </Route>
         </Routes>
       </main>
     </div>

@@ -31,7 +31,11 @@ const LoginPage = () => {
       }
     }
 
-    reset();
+    return () => {
+      if (isError || isSuccess) {
+        reset();
+      }
+    };
   }, [user, isError, isSuccess, message, navigate, reset]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
