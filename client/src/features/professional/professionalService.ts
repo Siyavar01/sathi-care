@@ -22,6 +22,19 @@ const getMyProfile = async (token: string) => {
   return response.data;
 };
 
+const getAllProfessionals = async (filters: any) => {
+  const params = new URLSearchParams();
+  if (filters.outreach) params.append('outreach', 'true');
+  if (filters.title) params.append('title', filters.title);
+  if (filters.specializations) params.append('specializations', filters.specializations.join(','));
+  if (filters.minExperience) params.append('minExperience', filters.minExperience);
+  if (filters.languages) params.append('languages', filters.languages.join(','));
+  if (filters.proBono) params.append('proBono', 'true');
+
+  const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
 const uploadProfilePicture = async (file: File, token: string) => {
   const formData = new FormData();
   formData.append('profilePicture', file);
@@ -67,6 +80,7 @@ const uploadCredential = async (
 const professionalService = {
   createOrUpdateProfile,
   getMyProfile,
+  getAllProfessionals,
   uploadProfilePicture,
   uploadCredential,
 };

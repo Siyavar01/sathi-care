@@ -85,15 +85,35 @@ const getMyProfessionalProfile = asyncHandler(
   }
 );
 
-// @desc    Get all verified professional profiles
+// @desc    Get all verified professional profiles with filtering
 // @route   GET /api/professionals
 // @access  Public
 const getAllProfessionals = asyncHandler(
   async (req: Request, res: Response) => {
-    const profiles = await Professional.find({ isVerified: true }).populate(
-      'user',
-      ['name']
-    );
+    const { outreach, title, specializations, minExperience, languages, proBono } = req.query;
+
+    const filter: any = { isVerified: true };
+
+    if (outreach === 'true') {
+      filter.acceptsInstitutionalOutreach = true;
+    }
+    if (title && typeof title === 'string') {
+      filter.title = title;
+    }
+    if (specializations && typeof specializations === 'string') {
+      filter.specializations = { $in: specializations.split(',') };
+    }
+    if (minExperience && !isNaN(Number(minExperience))) {
+      filter.experience = { $gte: Number(minExperience) };
+    }
+    if (languages && typeof languages === 'string') {
+      filter.languages = { $in: languages.split(',') };
+    }
+    if (proBono === 'true') {
+      filter.offersProBono = true;
+    }
+
+    const profiles = await Professional.find(filter).populate('user', ['name']);
     res.json(profiles);
   }
 );

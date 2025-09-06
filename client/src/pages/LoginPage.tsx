@@ -26,6 +26,8 @@ const LoginPage = () => {
         navigate('/professional/profile');
       } else if (user?.role === 'admin') {
         navigate('/admin/dashboard');
+      } else if (user?.role === 'user' || user?.role === 'institution') {
+        navigate('/professionals');
       } else {
         navigate('/');
       }

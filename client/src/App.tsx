@@ -10,6 +10,7 @@ import ProfessionalRegisterPage from './pages/ProfessionalRegisterPage.tsx';
 import ProfessionalProfilePage from './pages/ProfessionalProfilePage.tsx';
 import AdminDashboardPage from './pages/AdminDashboardPage.tsx';
 import AdminRoute from './components/AdminRoute.tsx';
+import ProfessionalDirectoryPage from './pages/ProfessionalDirectoryPage.tsx';
 
 function App() {
   return (
@@ -27,12 +28,11 @@ function App() {
             element={<ProfessionalRegisterPage />}
           />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
-
+          <Route path="/professionals" element={<ProfessionalDirectoryPage />} />
           <Route
             path="/professional/profile"
             element={<ProfessionalProfilePage />}
           />
-
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />
           </Route>
