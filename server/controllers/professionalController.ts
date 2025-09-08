@@ -35,33 +35,41 @@ const createOrUpdateProfessionalProfile = asyncHandler(
       throw new Error('Please provide all required basic information fields');
     }
 
-    const profileFields = {
-      user: user._id,
-      title,
-      bio,
-      specializations,
-      experience,
-      languages,
-      offersProBono,
-      acceptsInstitutionalOutreach,
-      sessionTypes,
-      availability,
-    };
-
     let professionalProfile = await Professional.findOne({ user: user._id });
 
-    if (professionalProfile) {
-      professionalProfile = await Professional.findOneAndUpdate(
-        { user: user._id },
-        { $set: profileFields },
-        { new: true, runValidators: true }
-      );
-    } else {
-      professionalProfile = await Professional.create(profileFields);
-      await User.findByIdAndUpdate(user._id, { role: 'professional' });
+    if (!professionalProfile) {
+      professionalProfile = await Professional.create({ user: user._id });
     }
 
-    res.status(200).json(professionalProfile);
+    professionalProfile.title = title;
+    professionalProfile.bio = bio;
+    professionalProfile.specializations = specializations;
+    professionalProfile.experience = experience;
+    professionalProfile.languages = languages;
+    professionalProfile.offersProBono = offersProBono;
+    professionalProfile.acceptsInstitutionalOutreach = acceptsInstitutionalOutreach;
+
+    professionalProfile.sessionTypes = sessionTypes.map((st: any) => {
+        return st._id && String(st._id).length === 24 ? st : { ...st, _id: undefined };
+    });
+
+    professionalProfile.availability = availability.map((day: any) => ({
+        day: day.day,
+        timeSlots: day.timeSlots.map((slot: any) => {
+            const linkedSession = professionalProfile!.sessionTypes.find(
+              (st: any) => st._id.toString() === slot.sessionTypeId
+            );
+            return {
+                startTime: slot.startTime,
+                endTime: slot.endTime,
+                sessionTypeId: linkedSession ? linkedSession._id : null
+            }
+        }).filter((slot: any) => slot.sessionTypeId)
+    }));
+
+    const updatedProfile = await professionalProfile.save();
+
+    res.status(200).json(updatedProfile);
   }
 );
 
@@ -117,6 +125,23 @@ const getAllProfessionals = asyncHandler(
     res.json(profiles);
   }
 );
+
+// @desc    Get a single professional profile by ID
+// @route   GET /api/professionals/:id
+// @access  Public
+const getProfessionalById = asyncHandler(async (req: Request, res: Response) => {
+  const profile = await Professional.findById(req.params.id).populate('user', [
+    'name',
+    'email',
+  ]);
+
+  if (profile) {
+    res.json(profile);
+  } else {
+    res.status(404);
+    throw new Error('Professional not found');
+  }
+});
 
 // @desc    Get matched professionals based on questionnaire
 // @route   POST /api/professionals/match
@@ -177,5 +202,6 @@ export {
   createOrUpdateProfessionalProfile,
   getMyProfessionalProfile,
   getAllProfessionals,
+  getProfessionalById,
   matchProfessionals,
 };

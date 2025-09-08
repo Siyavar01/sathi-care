@@ -11,6 +11,9 @@ import ProfessionalProfilePage from './pages/ProfessionalProfilePage.tsx';
 import AdminDashboardPage from './pages/AdminDashboardPage.tsx';
 import AdminRoute from './components/AdminRoute.tsx';
 import ProfessionalDirectoryPage from './pages/ProfessionalDirectoryPage.tsx';
+import InstitutionRegisterPage from './pages/InstitutionRegisterPage.tsx';
+import InstitutionDashboardPage from './pages/InstitutionDashboardPage.tsx';
+import ProfessionalConnectPage from './pages/ProfessionalConnectPage.tsx';
 
 function App() {
   return (
@@ -27,11 +30,20 @@ function App() {
             path="/register/professional"
             element={<ProfessionalRegisterPage />}
           />
+           <Route
+            path="/register/institution"
+            element={<InstitutionRegisterPage />}
+          />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="/professionals" element={<ProfessionalDirectoryPage />} />
+          <Route path="/professionals/:id/connect" element={<ProfessionalConnectPage />} />
           <Route
             path="/professional/profile"
             element={<ProfessionalProfilePage />}
+          />
+           <Route
+            path="/institution/dashboard"
+            element={<InstitutionDashboardPage />}
           />
           <Route path="/admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboardPage />} />

@@ -40,3 +40,22 @@ export interface IProfessional {
     url: string;
   }[];
 }
+
+export interface IInstitutionProfile {
+  _id: string;
+  user: IUser;
+  institutionName: string;
+  address: string;
+  contactPerson: string;
+  contactEmail: string;
+  website?: string;
+}
+
+export interface IConnectionRequest {
+    _id: string;
+    institution: IInstitutionProfile;
+    professional: IProfessional;
+    message: string;
+    status: 'pending' | 'accepted' | 'declined';
+    createdAt: string;
+}

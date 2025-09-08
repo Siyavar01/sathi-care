@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = '/api/professionals/';
+const INSTITUTION_API_URL = '/api/institutions/';
 
 const createOrUpdateProfile = async (profileData: any, token: string) => {
   const config = {
@@ -32,6 +33,21 @@ const getAllProfessionals = async (filters: any) => {
   if (filters.proBono) params.append('proBono', 'true');
 
   const response = await axios.get(API_URL, { params });
+  return response.data;
+};
+
+const getProfessionalById = async (id: string) => {
+  const response = await axios.get(API_URL + id);
+  return response.data;
+};
+
+const createConnectionRequest = async (requestData: { professionalId: string; message: string }, token: string) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.post(INSTITUTION_API_URL + 'connect', requestData, config);
   return response.data;
 };
 
@@ -81,6 +97,8 @@ const professionalService = {
   createOrUpdateProfile,
   getMyProfile,
   getAllProfessionals,
+  getProfessionalById,
+  createConnectionRequest,
   uploadProfilePicture,
   uploadCredential,
 };

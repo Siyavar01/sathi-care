@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import useAuthStore from '../features/auth/authSlice';
 import useProfessionalListStore from '../features/professional/professionalListSlice.ts';
 import type { IProfessional } from '../types/index.ts';
@@ -16,8 +17,8 @@ const ProfessionalDirectoryPage = () => {
   });
 
   useEffect(() => {
-    const userRole = user?.role;
-    getAllProfessionals({ outreach: userRole === 'institution' });
+    const forOutreach = user?.role === 'institution';
+    getAllProfessionals({ outreach: forOutreach });
 
     return () => {
       reset();
@@ -46,17 +47,18 @@ const ProfessionalDirectoryPage = () => {
   };
 
   const renderActionButton = (professional: IProfessional) => {
+    const commonButtonClasses = "mt-auto w-full rounded-lg px-4 py-3 text-center font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105";
     if (user?.role === 'institution') {
       return (
-        <button className="mt-auto w-full rounded-lg bg-pastel-purple px-4 py-3 font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105">
+        <Link to={`/professionals/${professional._id}/connect`} className={`${commonButtonClasses} bg-pastel-purple`}>
           Inquire for Outreach
-        </button>
+        </Link>
       );
     }
     return (
-      <button className="mt-auto w-full rounded-lg bg-pastel-pink px-4 py-3 font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105">
+      <Link to={`/professionals/${professional._id}/book`} className={`${commonButtonClasses} bg-pastel-pink`}>
         Book a Session
-      </button>
+      </Link>
     );
   };
 
@@ -169,10 +171,12 @@ const ProfessionalDirectoryPage = () => {
                        <div className="border-t border-gray-200 pt-4 space-y-3 text-sm text-brand-charcoal">
                           <div className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0 text-gray-400 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" /></svg><span>{prof.experience} years of experience</span></div>
                           <div className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 flex-shrink-0 text-gray-400 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a6 6 0 00-6 6c0 1.887.645 3.65 1.758 5.042a.5.5 0 01.1 0l.003.002.002.002.002.002a.5.5 0 00.34.152h7.6a.5.5 0 00.34-.152l.002-.002.002-.002.003-.002a.5.5 0 01.1 0C15.355 11.65 16 9.887 16 8a6 6 0 00-6-6zm0 11.5a4.5 4.5 0 100-9 4.5 4.5 0 000 9z" /><path d="M4.08 13.372A7.5 7.5 0 0010 15.5a7.5 7.5 0 005.92-2.128.5.5 0 00-.638-.772A6.5 6.5 0 114.718 12.6a.5.5 0 00-.638.772z" /></svg><span>Speaks: {prof.languages.join(', ')}</span></div>
-                          {prof.offersProBono && <div className="flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800"><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" /></svg><span>Offers Pro Bono Sessions</span></div>}
+                          {user?.role !== 'institution' && prof.offersProBono && <div className="flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800"><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" /></svg><span>Offers Pro Bono Sessions</span></div>}
                       </div>
                   </div>
-                  {renderActionButton(prof)}
+                  <div className="pt-4">
+                    {renderActionButton(prof)}
+                  </div>
                 </div>
               ))}
             </div>

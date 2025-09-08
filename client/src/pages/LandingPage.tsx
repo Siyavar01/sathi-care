@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import useAuthStore from '../features/auth/authSlice';
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
   const [breatheIndex, setBreatheIndex] = useState(0);
 
@@ -9,19 +12,28 @@ const LandingPage = () => {
   const cycleDurations = [4000, 2000, 4000];
 
   useEffect(() => {
-    const mountTimer = setTimeout(() => setIsMounted(true), 100);
+    if (user) {
+      if (user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (user.role === 'professional') {
+        navigate('/professional/profile');
+      } else if (user.role === 'institution' || user.role === 'user') {
+        navigate('/professionals');
+      }
+    } else {
+      const mountTimer = setTimeout(() => setIsMounted(true), 100);
+      let currentIndex = 0;
+      const interval = setInterval(() => {
+        setBreatheIndex(currentIndex);
+        currentIndex = (currentIndex + 1) % breatheCycle.length;
+      }, cycleDurations[currentIndex]);
 
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      setBreatheIndex(currentIndex);
-      currentIndex = (currentIndex + 1) % breatheCycle.length;
-    }, cycleDurations[currentIndex]);
-
-    return () => {
-      clearTimeout(mountTimer);
-      clearInterval(interval);
-    };
-  }, []);
+      return () => {
+        clearTimeout(mountTimer);
+        clearInterval(interval);
+      };
+    }
+  }, [user, navigate]);
 
   const breatheText = breatheCycle[breatheIndex];
   const breatheAnimationClass =

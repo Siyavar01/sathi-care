@@ -3,6 +3,7 @@ import {
   createOrUpdateProfessionalProfile,
   getMyProfessionalProfile,
   getAllProfessionals,
+  getProfessionalById,
   matchProfessionals,
 } from '../controllers/professionalController.ts';
 import {
@@ -34,5 +35,7 @@ router.route('/match').post(protect, matchProfessionals);
 router
   .route('/credentials/upload')
   .post(protect, upload.single('credential'), uploadCredential);
+
+router.route('/:id').get(getProfessionalById);
 
 export default router;
