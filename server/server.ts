@@ -8,6 +8,8 @@ import professionalRoutes from './routes/professionalRoutes.ts';
 import adminRoutes from './routes/adminRoutes.ts';
 import questionnaireRoutes from './routes/questionnaireRoutes.ts';
 import institutionRoutes from './routes/institutionRoutes.ts';
+import appointmentRoutes from './routes/appointmentRoutes.ts';
+import paymentRoutes from './routes/paymentRoutes.ts';
 import { errorHandler } from './middleware/errorMiddleware.ts';
 import './config/passport.ts';
 
@@ -29,6 +31,8 @@ app.use('/api/professionals', professionalRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/questionnaire', questionnaireRoutes);
 app.use('/api/institutions', institutionRoutes);
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/payments', paymentRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
