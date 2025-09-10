@@ -5,12 +5,14 @@ import {
   getAllProfessionals,
   getProfessionalById,
   matchProfessionals,
+  getIncomingConnectionRequests,
+  updateConnectionRequestStatus,
 } from '../controllers/professionalController.ts';
 import {
   uploadCredential,
   uploadProfilePicture,
 } from '../controllers/uploadController.ts';
-import { protect } from '../middleware/authMiddleware.ts';
+import { protect, authorize } from '../middleware/authMiddleware.ts';
 import multer from 'multer';
 
 const router = express.Router();
@@ -20,13 +22,20 @@ const upload = multer({ storage: storage });
 
 router
   .route('/profile')
-  .post(protect, createOrUpdateProfessionalProfile);
+  .post(protect, authorize('professional'), createOrUpdateProfessionalProfile);
 
-router.route('/profile/me').get(protect, getMyProfessionalProfile);
+router
+  .route('/profile/me')
+  .get(protect, authorize('professional'), getMyProfessionalProfile);
 
 router
   .route('/profile/upload-picture')
-  .post(protect, upload.single('profilePicture'), uploadProfilePicture);
+  .post(
+    protect,
+    authorize('professional'),
+    upload.single('profilePicture'),
+    uploadProfilePicture
+  );
 
 router.route('/').get(getAllProfessionals);
 
@@ -34,7 +43,19 @@ router.route('/match').post(protect, matchProfessionals);
 
 router
   .route('/credentials/upload')
-  .post(protect, upload.single('credential'), uploadCredential);
+  .post(
+    protect,
+    authorize('professional'),
+    upload.single('credential'),
+    uploadCredential
+  );
+
+router
+  .route('/requests/incoming')
+  .get(protect, authorize('professional'), getIncomingConnectionRequests);
+router
+  .route('/requests/:id')
+  .put(protect, authorize('professional'), updateConnectionRequestStatus);
 
 router.route('/:id').get(getProfessionalById);
 

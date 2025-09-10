@@ -16,6 +16,7 @@ import InstitutionDashboardPage from './pages/InstitutionDashboardPage.tsx';
 import ProfessionalConnectPage from './pages/ProfessionalConnectPage.tsx';
 import ProfessionalDetailPage from './pages/ProfessionalDetailPage.tsx';
 import UserDashboardPage from './pages/UserDashboardPage.tsx';
+import ProfessionalDashboardPage from './pages/ProfessionalDashboardPage.tsx';
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="/professionals/:id/book" element={<ProfessionalDetailPage />} />
           <Route path="/user/dashboard" element={<UserDashboardPage />} />
           <Route path="/professional/profile" element={<ProfessionalProfilePage />} />
-          <Route path="/professional/dashboard" element={<div>Professional Dashboard</div>} />
+          <Route path="/professional/dashboard" element={<ProfessionalDashboardPage />} />
           <Route path="/institution/dashboard" element={<InstitutionDashboardPage />} />
           <Route path="/professionals/:id/connect" element={<ProfessionalConnectPage />} />
           <Route path="/admin" element={<AdminRoute />}>

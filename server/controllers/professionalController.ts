@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import Professional from '../models/professionalModel.ts';
+import ConnectionRequest from '../models/connectionRequestModel.ts';
 import User, { IUser } from '../models/userModel.ts';
 import ResponseModel from '../models/responseModel.ts';
 import Question from '../models/questionnaireModel.ts';
@@ -198,10 +199,83 @@ const matchProfessionals = asyncHandler(async (req: Request, res: Response) => {
   res.json({ primaryConcern, recommendations: sortedProfessionals });
 });
 
+// @desc    Get incoming connection requests for a professional
+// @route   GET /api/professionals/requests/incoming
+// @access  Private (Professional)
+const getIncomingConnectionRequests = asyncHandler(
+  async (req: Request, res: Response) => {
+    const user = req.user as IUser;
+    const professionalProfile = await Professional.findOne({ user: user._id });
+
+    if (!professionalProfile) {
+      res.status(404);
+      throw new Error('Professional profile not found');
+    }
+
+    const requests = await ConnectionRequest.find({
+      professional: professionalProfile._id,
+    }).populate({
+        path: 'institution',
+        select: 'institutionName user',
+        populate: {
+            path: 'user',
+            select: 'name email'
+        }
+    });
+
+    res.status(200).json(requests);
+  }
+);
+
+// @desc    Update the status of a connection request
+// @route   PUT /api/professionals/requests/:id
+// @access  Private (Professional)
+const updateConnectionRequestStatus = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { status } = req.body;
+    const requestId = req.params.id;
+    const user = req.user as IUser;
+
+    if (!status || !['accepted', 'declined'].includes(status)) {
+        res.status(400);
+        throw new Error('Invalid status provided');
+    }
+
+    const request = await ConnectionRequest.findById(requestId);
+
+    if (!request) {
+        res.status(404);
+        throw new Error('Connection request not found');
+    }
+
+    const professionalProfile = await Professional.findById(request.professional);
+    if (professionalProfile?.user.toString() !== user._id.toString()) {
+        res.status(401);
+        throw new Error('User not authorized to update this request');
+    }
+
+    request.status = status;
+    await request.save();
+
+    const updatedRequest = await ConnectionRequest.findById(requestId).populate({
+        path: 'institution',
+        populate: {
+            path: 'user',
+            select: 'name email'
+        }
+    });
+
+    res.status(200).json(updatedRequest);
+  }
+);
+
+
 export {
   createOrUpdateProfessionalProfile,
   getMyProfessionalProfile,
   getAllProfessionals,
   getProfessionalById,
   matchProfessionals,
+  getIncomingConnectionRequests,
+  updateConnectionRequestStatus,
 };

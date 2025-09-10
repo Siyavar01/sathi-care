@@ -93,6 +93,22 @@ const uploadCredential = async (
   return response.data;
 };
 
+const getIncomingConnectionRequests = async (token: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await axios.get(API_URL + 'requests/incoming', config);
+  return response.data;
+};
+
+const updateConnectionRequestStatus = async (requestId: string, status: 'accepted' | 'declined', token: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await axios.put(API_URL + `requests/${requestId}`, { status }, config);
+  return response.data;
+};
+
 const professionalService = {
   createOrUpdateProfile,
   getMyProfile,
@@ -101,6 +117,8 @@ const professionalService = {
   createConnectionRequest,
   uploadProfilePicture,
   uploadCredential,
+  getIncomingConnectionRequests,
+  updateConnectionRequestStatus,
 };
 
 export default professionalService;

@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import professionalService from './professionalService.ts';
-import type { IProfessional } from '../../types/index.ts';
+import type { IProfessional, IConnectionRequest } from '../../types/index.ts';
 
 interface ProfessionalState {
   profile: IProfessional | null;
   publicProfile: IProfessional | null;
+  incomingRequests: IConnectionRequest[];
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -15,12 +16,15 @@ interface ProfessionalState {
   createConnectionRequest: (requestData: { professionalId: string; message: string }, token: string) => Promise<void>;
   uploadProfilePicture: (file: File, token: string) => Promise<void>;
   uploadCredential: (credentialData: { file: File; name: string }, token: string) => Promise<void>;
+  getIncomingConnectionRequests: (token: string) => Promise<void>;
+  updateConnectionRequestStatus: (requestId: string, status: 'accepted' | 'declined', token: string) => Promise<void>;
   reset: () => void;
 }
 
 const useProfessionalStore = create<ProfessionalState>((set) => ({
   profile: null,
   publicProfile: null,
+  incomingRequests: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -89,6 +93,34 @@ const useProfessionalStore = create<ProfessionalState>((set) => ({
       set({ isLoading: false, isError: true, message });
     }
   },
+
+  getIncomingConnectionRequests: async (token) => {
+    set({ isLoading: true });
+    try {
+      const requests = await professionalService.getIncomingConnectionRequests(token);
+      set({ isLoading: false, isSuccess: true, incomingRequests: requests });
+    } catch (error: any) {
+      const message = (error.response?.data?.message) || error.message || error.toString();
+      set({ isLoading: false, isError: true, message });
+    }
+  },
+
+  updateConnectionRequestStatus: async (requestId, status, token) => {
+    set({ isLoading: true });
+    try {
+      const updatedRequest = await professionalService.updateConnectionRequestStatus(requestId, status, token);
+      set((state) => ({
+        isLoading: false,
+        isSuccess: true,
+        message: `Request ${status}.`,
+        incomingRequests: state.incomingRequests.map(req => req._id === requestId ? updatedRequest : req),
+      }));
+    } catch (error: any) {
+      const message = (error.response?.data?.message) || error.message || error.toString();
+      set({ isLoading: false, isError: true, message });
+    }
+  },
+
   reset: () => set({ publicProfile: null, isError: false, isSuccess: false, isLoading: false, message: '' }),
 }));
 
