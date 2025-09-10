@@ -37,16 +37,18 @@ const createOrder = asyncHandler(async (req: Request, res: Response) => {
   res.status(201).json(order);
 });
 
-// @desc    Verify a payment and update appointment status
-// @route   POST /api/payments/verify
+// @desc    Verify payment and create the appointment
+// @route   POST /api/payments/verify-and-book
 // @access  Private
-const verifyPayment = asyncHandler(async (req: Request, res: Response) => {
+const verifyAndBookAppointment = asyncHandler(async (req: Request, res: Response) => {
   const {
     razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature,
-    appointmentId,
+    appointmentData,
   } = req.body;
+
+  const user = req.user as IUser;
 
   const generated_signature = crypto
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET!)
@@ -58,20 +60,22 @@ const verifyPayment = asyncHandler(async (req: Request, res: Response) => {
     throw new Error('Payment verification failed. Invalid signature.');
   }
 
-  const appointment = await Appointment.findById(appointmentId);
-  if (appointment) {
-    appointment.status = 'confirmed';
-    appointment.paymentId = razorpay_payment_id;
+  const { professionalId, sessionDetails, appointmentDate } = appointmentData;
 
-    const videoRoomId = crypto.randomBytes(16).toString('hex');
-    appointment.videoRoomUrl = `https://meet.jit.si/${videoRoomId}`;
+  const appointment = await Appointment.create({
+    user: user._id,
+    professional: professionalId,
+    sessionDetails,
+    appointmentDate,
+    status: 'confirmed',
+    paymentId: razorpay_payment_id,
+    videoRoomUrl: `https://meet.jit.si/${crypto.randomBytes(16).toString('hex')}`,
+  });
 
-    await appointment.save();
-    res.status(200).json({ message: 'Payment verified and appointment confirmed' });
-  } else {
-    res.status(404);
-    throw new Error('Appointment not found');
-  }
+  res.status(201).json({
+    message: 'Payment verified and appointment confirmed',
+    appointment,
+  });
 });
 
-export { createOrder, verifyPayment };
+export { createOrder, verifyAndBookAppointment };

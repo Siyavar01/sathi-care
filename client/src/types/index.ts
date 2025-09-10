@@ -52,10 +52,22 @@ export interface IInstitutionProfile {
 }
 
 export interface IConnectionRequest {
-    _id: string;
-    institution: IInstitutionProfile;
-    professional: IProfessional;
-    message: string;
-    status: 'pending' | 'accepted' | 'declined';
-    createdAt: string;
+  _id: string;
+  institution: IInstitutionProfile;
+  professional: IProfessional;
+  message: string;
+  status: 'pending' | 'accepted' | 'declined';
+  createdAt: string;
+}
+
+export interface IAppointment {
+  _id: string;
+  user: IUser;
+  professional: IProfessional;
+  sessionDetails: ISessionType;
+  appointmentDate: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  paymentId?: string;
+  videoRoomUrl?: string;
+  createdAt: string;
 }
