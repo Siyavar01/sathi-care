@@ -4,6 +4,8 @@ export interface IUser {
   email: string;
   role: string;
   token: string;
+  googleId?: string;
+  latestSubmissionId?: string;
 }
 
 export interface ISessionType {
@@ -70,4 +72,11 @@ export interface IAppointment {
   paymentId?: string;
   videoRoomUrl?: string;
   createdAt: string;
+}
+
+export interface IQuestion {
+  _id: string;
+  category: string;
+  text: string;
+  options: string[];
 }

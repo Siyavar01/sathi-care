@@ -17,8 +17,10 @@ router.get(
     session: false,
   }),
   (req, res) => {
-    const user = req.user as IUser;
-    const token = generateToken(user._id);
+    const user = req.user as IUser & { createdAt: Date };
+    const token = generateToken(user._id.toString());
+
+    const isNewUser = (new Date().getTime() - new Date(user.createdAt).getTime()) < 10000;
 
     const userData = {
       _id: user._id,
@@ -26,6 +28,9 @@ router.get(
       email: user.email,
       role: user.role,
       token: token,
+      googleId: user.googleId,
+      latestSubmissionId: user.latestSubmissionId,
+      isNewUser: isNewUser,
     };
 
     const userString = encodeURIComponent(JSON.stringify(userData));

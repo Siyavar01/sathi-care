@@ -1,13 +1,13 @@
 import express from 'express';
 import {
   getQuestions,
-  submitResponses,
+  submitAnswers,
 } from '../controllers/questionnaireController';
 import { protect } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
-router.route('/').get(protect, getQuestions);
-router.route('/submit').post(protect, submitResponses);
+router.route('/').get(getQuestions);
+router.route('/submit').post(protect, submitAnswers);
 
 export default router;

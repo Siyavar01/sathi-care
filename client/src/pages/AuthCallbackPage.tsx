@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import useAuthStore from '../features/auth/authSlice';
 import type { IUser } from '../types';
 
+type UserAuthResponse = IUser & { isNewUser?: boolean };
+
 const AuthCallbackPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user: authUser, login } = useAuthStore();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -14,20 +15,22 @@ const AuthCallbackPage = () => {
 
     if (userString) {
       try {
-        const userData: IUser = JSON.parse(decodeURIComponent(userString));
+        const userData: UserAuthResponse = JSON.parse(decodeURIComponent(userString));
+
         localStorage.setItem('user', JSON.stringify(userData));
         useAuthStore.setState({ user: userData, isSuccess: true });
 
-        if (userData?.role === 'professional') {
-          navigate('/professional/profile');
-        } else if (userData?.role === 'admin') {
-          navigate('/admin/dashboard');
-        } else if (userData?.role === 'user' || userData?.role === 'institution') {
-          navigate('/professionals');
+        if (userData.isNewUser && userData.role === 'user') {
+          navigate('/questionnaire');
         } else {
-          navigate('/');
+          if (userData.role === 'professional') {
+            navigate('/professional/profile');
+          } else if (userData.role === 'admin') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/professionals');
+          }
         }
-
       } catch (error) {
         console.error('Failed to parse user data from URL', error);
         navigate('/login');
@@ -35,12 +38,12 @@ const AuthCallbackPage = () => {
     } else {
       navigate('/login');
     }
-  }, [location, navigate, login]);
+  }, [location, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-brand-cream">
       <div className="text-center">
-        <p className="text-lg text-brand-charcoal">Finalizing your login...</p>
+        <p className="text-lg text-brand-charcoal animate-pulse">Finalizing your login...</p>
       </div>
     </div>
   );

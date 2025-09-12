@@ -6,7 +6,7 @@ import type { IProfessional } from '../types/index.ts';
 
 const ProfessionalDirectoryPage = () => {
   const { user } = useAuthStore();
-  const { professionals, isLoading, isError, message, getAllProfessionals, reset } = useProfessionalListStore();
+  const { professionals, primaryConcern, isLoading, isError, message, getAllProfessionals, matchProfessionals, reset } = useProfessionalListStore();
 
   const [filters, setFilters] = useState({
     specialization: '',
@@ -17,13 +17,17 @@ const ProfessionalDirectoryPage = () => {
   });
 
   useEffect(() => {
-    const forOutreach = user?.role === 'institution';
-    getAllProfessionals({ outreach: forOutreach });
+    if (user?.latestSubmissionId && user.token) {
+      matchProfessionals(user.latestSubmissionId, user.token);
+    } else {
+      const forOutreach = user?.role === 'institution';
+      getAllProfessionals({ outreach: forOutreach });
+    }
 
     return () => {
       reset();
     };
-  }, [user, getAllProfessionals, reset]);
+  }, [user, getAllProfessionals, matchProfessionals, reset]);
 
   const filteredProfessionals = useMemo(() => {
     return professionals.filter(prof => {
@@ -137,6 +141,15 @@ const ProfessionalDirectoryPage = () => {
                 )}
             </div>
         </div>
+
+        {primaryConcern && (
+            <div className="mt-8 text-center">
+                <p className="text-lg font-medium text-brand-charcoal">
+                    Based on your check-in, your primary concern appears to be <span className="font-bold text-pastel-purple">{primaryConcern}</span>.
+                </p>
+                <p className="text-sm text-gray-600">Here are our top recommendations for you, listed first.</p>
+            </div>
+        )}
 
         <div className="mt-12">
           {isLoading && <p className="text-center text-brand-charcoal">Loading professionals...</p>}

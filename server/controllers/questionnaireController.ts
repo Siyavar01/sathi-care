@@ -1,51 +1,60 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import { randomUUID } from 'crypto';
-import Question from '../models/questionnaireModel';
-import ResponseModel from '../models/responseModel';
-import { IUser } from '../models/userModel';
+import Question from '../models/questionnaireModel.ts';
+import ResponseModel from '../models/responseModel.ts';
+import User, { IUser } from '../models/userModel.ts';
+import { v4 as uuidv4 } from 'uuid';
+import generateToken from '../utils/generateToken.ts';
 
-declare module 'express-serve-static-core' {
-  interface Request {
-    user?: IUser | null;
-  }
-}
-
-// @desc    Get all questions
-// @route   GET /api/questionnaire
-// @access  Private
 const getQuestions = asyncHandler(async (req: Request, res: Response) => {
   const questions = await Question.find({});
-  res.status(200).json(questions);
+  res.json(questions);
 });
 
-// @desc    Submit questionnaire responses
-// @route   POST /api/questionnaire/submit
-// @access  Private
-const submitResponses = asyncHandler(async (req: Request, res: Response) => {
+const submitAnswers = asyncHandler(async (req: Request, res: Response) => {
+  const { answers } = req.body;
   const user = req.user as IUser;
-  const { responses } = req.body;
 
-  if (!responses || !Array.isArray(responses) || responses.length === 0) {
+  if (!answers || !Array.isArray(answers) || answers.length === 0) {
     res.status(400);
-    throw new Error('Responses are required and must be an array.');
+    throw new Error('Answers are required');
   }
 
-  const submissionId = randomUUID();
+  const submissionId = uuidv4();
 
-  const responseDocs = responses.map((response: any) => ({
+  const responsesToSave = answers.map((ans) => ({
     user: user._id,
-    question: response.questionId,
-    answer: response.answer,
-    submissionId: submissionId,
+    question: ans.question,
+    answer: ans.answer,
+    submissionId,
   }));
 
-  await ResponseModel.insertMany(responseDocs);
+  await ResponseModel.insertMany(responsesToSave);
 
-  res.status(201).json({
-    message: 'Responses submitted successfully.',
-    submissionId: submissionId,
-  });
+  const updatedUser = await User.findByIdAndUpdate(
+    user._id,
+    { latestSubmissionId: submissionId },
+    { new: true }
+  );
+
+  if (updatedUser) {
+    res.status(201).json({
+      message: 'Responses submitted successfully',
+      submissionId,
+      user: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        googleId: updatedUser.googleId,
+        latestSubmissionId: updatedUser.latestSubmissionId,
+        token: generateToken(updatedUser._id.toString()),
+      }
+    });
+  } else {
+      res.status(404);
+      throw new Error('User not found after submission.');
+  }
 });
 
-export { getQuestions, submitResponses };
+export { getQuestions, submitAnswers };

@@ -109,6 +109,14 @@ const updateConnectionRequestStatus = async (requestId: string, status: 'accepte
   return response.data;
 };
 
+const matchProfessionals = async (submissionId: string, token: string) => {
+    const config = {
+        headers: { Authorization: `Bearer ${token}` },
+    };
+    const response = await axios.post(API_URL + 'match', { submissionId }, config);
+    return response.data;
+}
+
 const professionalService = {
   createOrUpdateProfile,
   getMyProfile,
@@ -119,6 +127,7 @@ const professionalService = {
   uploadCredential,
   getIncomingConnectionRequests,
   updateConnectionRequestStatus,
+  matchProfessionals,
 };
 
 export default professionalService;

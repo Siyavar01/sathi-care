@@ -7,6 +7,7 @@ export interface IUser extends Document {
   googleId?: string;
   role: 'user' | 'professional' | 'admin' | 'institution';
   paymentGatewayCustomerId?: string;
+  latestSubmissionId?: string;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -33,6 +34,9 @@ const userSchema: Schema<IUser> = new Schema(
       default: 'user',
     },
     paymentGatewayCustomerId: {
+      type: String,
+    },
+    latestSubmissionId: {
       type: String,
     },
   },

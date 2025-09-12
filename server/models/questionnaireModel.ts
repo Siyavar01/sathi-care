@@ -1,13 +1,18 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 export interface IQuestion extends Document {
+  category: 'Anxiety' | 'Depression' | 'Stress Management';
   text: string;
   options: string[];
-  category: 'Anxiety' | 'Depression' | 'Stress' | 'General';
 }
 
-const questionSchema: Schema = new Schema(
+const questionSchema = new Schema<IQuestion>(
   {
+    category: {
+      type: String,
+      required: true,
+      enum: ['Anxiety', 'Depression', 'Stress Management'],
+    },
     text: {
       type: String,
       required: true,
@@ -15,12 +20,6 @@ const questionSchema: Schema = new Schema(
     options: {
       type: [String],
       required: true,
-      // Example: ['Not at all', 'Several days', 'More than half the days', 'Nearly every day']
-    },
-    category: {
-      type: String,
-      required: true,
-      enum: ['Anxiety', 'Depression', 'Stress', 'General'],
     },
   },
   {
@@ -28,6 +27,6 @@ const questionSchema: Schema = new Schema(
   }
 );
 
-const Question = mongoose.model<IQuestion>('Question', questionSchema);
+const Question = model<IQuestion>('Question', questionSchema);
 
 export default Question;

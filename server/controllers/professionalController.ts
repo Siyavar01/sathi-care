@@ -185,7 +185,7 @@ const matchProfessionals = asyncHandler(async (req: Request, res: Response) => {
     score[a] > score[b] ? a : b
   );
 
-  const professionals = await Professional.find({ isVerified: true });
+  const professionals = await Professional.find({ isVerified: true }).populate('user', 'name');
 
   const sortedProfessionals = [...professionals].sort((a, b) => {
     const aHasSpecialization = a.specializations.includes(primaryConcern);
