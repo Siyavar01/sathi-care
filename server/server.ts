@@ -10,6 +10,7 @@ import questionnaireRoutes from './routes/questionnaireRoutes.ts';
 import institutionRoutes from './routes/institutionRoutes.ts';
 import appointmentRoutes from './routes/appointmentRoutes.ts';
 import paymentRoutes from './routes/paymentRoutes.ts';
+import moodRoutes from './routes/moodRoutes.ts';
 import { errorHandler } from './middleware/errorMiddleware.ts';
 import './config/passport.ts';
 
@@ -33,6 +34,7 @@ app.use('/api/questionnaire', questionnaireRoutes);
 app.use('/api/institutions', institutionRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/moods', moodRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
