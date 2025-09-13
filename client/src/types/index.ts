@@ -80,3 +80,12 @@ export interface IQuestion {
   text: string;
   options: string[];
 }
+
+export interface IMoodEntry {
+  _id: string;
+  user: string;
+  rating: number;
+  notes?: string;
+  entryDate: string;
+  createdAt: string;
+}
