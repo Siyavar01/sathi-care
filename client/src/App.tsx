@@ -18,6 +18,8 @@ import ProfessionalDetailPage from './pages/ProfessionalDetailPage.tsx';
 import UserDashboardPage from './pages/UserDashboardPage.tsx';
 import ProfessionalDashboardPage from './pages/ProfessionalDashboardPage.tsx';
 import QuestionnairePage from './pages/QuestionnairePage.tsx';
+import ForumPage from './pages/ForumPage.tsx';
+import PostDetailPage from './pages/PostDetailPage.tsx';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <Route path="/professionals" element={<ProfessionalDirectoryPage />} />
           <Route path="/professionals/:id/book" element={<ProfessionalDetailPage />} />
           <Route path="/user/dashboard" element={<UserDashboardPage />} />
+          <Route path="/forum" element={<ForumPage />} />
+          <Route path="/forum/:id" element={<PostDetailPage />} />
           <Route path="/questionnaire" element={<QuestionnairePage />} />
           <Route path="/professional/profile" element={<ProfessionalProfilePage />} />
           <Route path="/professional/dashboard" element={<ProfessionalDashboardPage />} />

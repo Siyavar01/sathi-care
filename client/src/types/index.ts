@@ -89,3 +89,22 @@ export interface IMoodEntry {
   entryDate: string;
   createdAt: string;
 }
+
+export interface IComment {
+  _id: string;
+  user: IUser;
+  post: string;
+  content: string;
+  isAnonymous: boolean;
+  createdAt: string;
+}
+
+export interface IPost {
+  _id: string;
+  user: IUser;
+  title: string;
+  content: string;
+  isAnonymous: boolean;
+  comments: IComment[];
+  createdAt: string;
+}

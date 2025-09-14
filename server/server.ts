@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import passport from 'passport';
+import http from 'http';
+import { Server } from 'socket.io';
 import connectDB from './config/db.ts';
 import userRoutes from './routes/userRoutes.ts';
 import authRoutes from './routes/authRoutes.ts';
@@ -11,18 +13,29 @@ import institutionRoutes from './routes/institutionRoutes.ts';
 import appointmentRoutes from './routes/appointmentRoutes.ts';
 import paymentRoutes from './routes/paymentRoutes.ts';
 import moodRoutes from './routes/moodRoutes.ts';
+import forumRoutes from './routes/forumRoutes.ts';
 import { errorHandler } from './middleware/errorMiddleware.ts';
 import './config/passport.ts';
 
 dotenv.config();
-
 connectDB();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ['GET', 'POST'],
+  },
+});
 
 app.use(express.json());
-
 app.use(passport.initialize());
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 const PORT = process.env.PORT || 5000;
 
@@ -35,6 +48,15 @@ app.use('/api/institutions', institutionRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/moods', moodRoutes);
+app.use('/api/forum', forumRoutes);
+
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 
 app.get('/', (req, res) => {
   res.send('API is running...');
@@ -42,6 +64,14 @@ app.get('/', (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+declare global {
+    namespace Express {
+        interface Request {
+            io: Server;
+        }
+    }
+}

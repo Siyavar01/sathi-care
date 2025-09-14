@@ -48,7 +48,7 @@ const Header = () => {
             </Menu.Item>
              <Menu.Item>
               {({ active }) => (
-                <Link to="/community" className={`${active ? 'bg-pastel-purple/20' : ''} block px-4 py-2 text-sm text-brand-charcoal`}>
+                <Link to="/forum" className={`${active ? 'bg-pastel-purple/20' : ''} block px-4 py-2 text-sm text-brand-charcoal`}>
                   Community Forum
                 </Link>
               )}
