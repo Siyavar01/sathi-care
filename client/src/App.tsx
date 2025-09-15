@@ -20,6 +20,7 @@ import ProfessionalDashboardPage from './pages/ProfessionalDashboardPage.tsx';
 import QuestionnairePage from './pages/QuestionnairePage.tsx';
 import ForumPage from './pages/ForumPage.tsx';
 import PostDetailPage from './pages/PostDetailPage.tsx';
+import AICompanionPage from './pages/AICompanionPage.tsx';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="/user/dashboard" element={<UserDashboardPage />} />
           <Route path="/forum" element={<ForumPage />} />
           <Route path="/forum/:id" element={<PostDetailPage />} />
+          <Route path="/ai-companion" element={<AICompanionPage />} />
           <Route path="/questionnaire" element={<QuestionnairePage />} />
           <Route path="/professional/profile" element={<ProfessionalProfilePage />} />
           <Route path="/professional/dashboard" element={<ProfessionalDashboardPage />} />

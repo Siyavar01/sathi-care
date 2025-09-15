@@ -14,6 +14,7 @@ import appointmentRoutes from './routes/appointmentRoutes.ts';
 import paymentRoutes from './routes/paymentRoutes.ts';
 import moodRoutes from './routes/moodRoutes.ts';
 import forumRoutes from './routes/forumRoutes.ts';
+import aiRoutes from './routes/aiRoutes.ts'
 import { errorHandler } from './middleware/errorMiddleware.ts';
 import './config/passport.ts';
 
@@ -49,6 +50,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/moods', moodRoutes);
 app.use('/api/forum', forumRoutes);
+app.use('/api/ai', aiRoutes);
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
