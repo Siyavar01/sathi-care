@@ -21,6 +21,7 @@ import QuestionnairePage from './pages/QuestionnairePage.tsx';
 import ForumPage from './pages/ForumPage.tsx';
 import PostDetailPage from './pages/PostDetailPage.tsx';
 import AICompanionPage from './pages/AICompanionPage.tsx';
+import ResourcesPage from './pages/ResourcesPage.tsx';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route path="/forum" element={<ForumPage />} />
           <Route path="/forum/:id" element={<PostDetailPage />} />
           <Route path="/ai-companion" element={<AICompanionPage />} />
+          <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/questionnaire" element={<QuestionnairePage />} />
           <Route path="/professional/profile" element={<ProfessionalProfilePage />} />
           <Route path="/professional/dashboard" element={<ProfessionalDashboardPage />} />

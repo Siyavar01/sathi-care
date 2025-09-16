@@ -108,3 +108,13 @@ export interface IPost {
   comments: IComment[];
   createdAt: string;
 }
+
+export interface IResource {
+  _id: string;
+  title: string;
+  category: 'Anxiety & Depression' | 'Stress Management' | 'Self Care';
+  pdfUrl: string;
+  imageUrl: string;
+  addedBy: string;
+  createdAt?: string;
+}

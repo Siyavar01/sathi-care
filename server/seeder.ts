@@ -3,9 +3,11 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import { professionals } from './data/professionals.ts';
 import { questions } from './data/questions.ts';
+import { resources } from './data/resources.ts';
 import User from './models/userModel.ts';
 import Professional from './models/professionalModel.ts';
 import Question from './models/questionnaireModel.ts';
+import Resource from './models/resourceModel.ts';
 import connectDB from './config/db.ts';
 
 dotenv.config();
@@ -62,6 +64,25 @@ const importQuestions = async () => {
     console.log('Questionnaire Data Imported!');
 }
 
+const importResources = async () => {
+    console.log('Importing resources...');
+    await Resource.deleteMany();
+
+    const adminUser = await User.findOne({ role: 'admin' });
+    if (!adminUser) {
+        console.error('Error: No admin user found. Please create an admin user before seeding resources.');
+        process.exit(1);
+    }
+
+    const resourcesWithAdmin = resources.map(resource => {
+        return { ...resource, addedBy: adminUser._id };
+    });
+
+    await Resource.insertMany(resourcesWithAdmin);
+    console.log('Resource Data Imported!');
+}
+
+
 const main = async () => {
     try {
         const args = process.argv.slice(2);
@@ -72,6 +93,7 @@ const main = async () => {
             await Professional.deleteMany();
             await User.deleteMany({ role: 'professional' });
             await Question.deleteMany();
+            await Resource.deleteMany();
             console.log('All Seed Data Destroyed!');
         } else {
             if (importAll || args.includes('--professionals')) {
@@ -79,6 +101,9 @@ const main = async () => {
             }
             if (importAll || args.includes('--questions')) {
                 await importQuestions();
+            }
+            if (importAll || args.includes('--resources')) {
+                await importResources();
             }
         }
         process.exit();
