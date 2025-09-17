@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
-import { professionals } from './data/professionals.ts';
-import { questions } from './data/questions.ts';
-import { resources } from './data/resources.ts';
-import User from './models/userModel.ts';
-import Professional from './models/professionalModel.ts';
-import Question from './models/questionnaireModel.ts';
-import Resource from './models/resourceModel.ts';
-import connectDB from './config/db.ts';
+import { professionals } from './data/professionals.js';
+import { questions } from './data/questions.js';
+import { resources } from './data/resources.js';
+import User from './models/userModel.js';
+import Professional from './models/professionalModel.js';
+import Question from './models/questionnaireModel.js';
+import Resource from './models/resourceModel.js';
+import connectDB from './config/db.js';
 
 dotenv.config();
 

@@ -3,8 +3,8 @@ import {
   getAllUsers,
   getUnverifiedProfessionals,
   verifyProfessional,
-} from '../controllers/adminController';
-import { protect, authorize } from '../middleware/authMiddleware';
+} from '../controllers/adminController.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

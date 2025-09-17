@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = '/api/appointments/';
+import api from '../../api/axiosConfig.js';
 
 const createAppointment = async (appointmentData: any, token: string) => {
   const config = {
@@ -8,7 +6,7 @@ const createAppointment = async (appointmentData: any, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL, appointmentData, config);
+  const response = await api.post('/api/appointments/', appointmentData, config);
   return response.data;
 };
 
@@ -18,12 +16,12 @@ const getMyAppointments = async (token: string) => {
             Authorization: `Bearer ${token}`,
         },
     };
-    const response = await axios.get(API_URL + 'my', config);
+    const response = await api.get('/api/appointments/' + 'my', config);
     return response.data;
 };
 
 const getAppointmentsByProfessional = async (professionalId: string) => {
-    const response = await axios.get(API_URL + `professional/${professionalId}`);
+    const response = await api.get('/api/appointments/' + `professional/${professionalId}`);
     return response.data;
 }
 

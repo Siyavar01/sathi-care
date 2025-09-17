@@ -3,8 +3,8 @@ import {
   createAppointment,
   getMyAppointments,
   getAppointmentsByProfessional,
-} from '../controllers/appointmentController.ts';
-import { protect } from '../middleware/authMiddleware.ts';
+} from '../controllers/appointmentController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

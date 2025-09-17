@@ -1,0 +1,42 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      server: ${{ steps.filter.outputs.server }}
+      client: ${{ steps.filter.outputs.client }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          server:
+            - 'server/**'
+          client:
+            - 'client/**'
+
+  deploy-server:
+    name: Deploy Server
+    needs: changes
+    if: ${{ needs.changes.outputs.server == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Server Deploy
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL_SERVER }}
+
+  deploy-client:
+    name: Deploy Client
+    needs: changes
+    if: ${{ needs.changes.outputs.client == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Client Deploy
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL_CLIENT }}

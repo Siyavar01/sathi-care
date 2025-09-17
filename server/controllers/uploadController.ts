@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import cloudinary from '../config/cloudinary.ts';
-import Professional from '../models/professionalModel.ts';
-import { IUser } from '../models/userModel.ts';
+import cloudinary from '../config/cloudinary.js';
+import Professional from '../models/professionalModel.js';
+import { IUser } from '../models/userModel.js';
 
 // @desc    Upload a credential file for a professional
 // @route   POST /api/professionals/credentials/upload

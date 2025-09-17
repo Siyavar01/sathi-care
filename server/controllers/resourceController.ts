@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Resource from '../models/resourceModel.ts';
-import { IUser } from '../models/userModel.ts';
+import Resource from '../models/resourceModel.js';
+import { IUser } from '../models/userModel.js';
 
 // @desc    Create a new resource
 // @route   POST /api/resources

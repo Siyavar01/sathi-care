@@ -1,14 +1,12 @@
-import axios from 'axios';
-
-const API_URL = '/api/forum/';
+import api from '../../api/axiosConfig.js';
 
 const getAllPosts = async () => {
-  const response = await axios.get(API_URL + 'posts');
+  const response = await api.get('/api/forum/' + 'posts');
   return response.data;
 };
 
 const getPostById = async (postId: string) => {
-  const response = await axios.get(API_URL + `posts/${postId}`);
+  const response = await api.get('/api/forum/' + `posts/${postId}`);
   return response.data;
 };
 
@@ -18,7 +16,7 @@ const createPost = async (postData: { title: string; content: string; isAnonymou
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'posts', postData, config);
+  const response = await api.post('/api/forum/' + 'posts', postData, config);
   return response.data;
 };
 
@@ -28,7 +26,7 @@ const createComment = async (postId: string, commentData: { content: string; isA
             Authorization: `Bearer ${token}`,
         },
     };
-    const response = await axios.post(API_URL + `posts/${postId}/comments`, commentData, config);
+    const response = await api.post('/api/forum/' + `posts/${postId}/comments`, commentData, config);
     return response.data;
 }
 

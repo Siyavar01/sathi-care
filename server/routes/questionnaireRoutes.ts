@@ -2,8 +2,8 @@ import express from 'express';
 import {
   getQuestions,
   submitAnswers,
-} from '../controllers/questionnaireController';
-import { protect } from '../middleware/authMiddleware';
+} from '../controllers/questionnaireController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

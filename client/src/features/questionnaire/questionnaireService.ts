@@ -1,9 +1,7 @@
-import axios from 'axios';
-
-const API_URL = '/api/questionnaire/';
+import api from '../../api/axiosConfig.js';
 
 const getQuestions = async () => {
-  const response = await axios.get(API_URL);
+  const response = await api.get('/api/questionnaire/');
   return response.data;
 };
 
@@ -13,7 +11,7 @@ const submitAnswers = async (answers: any, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'submit', { answers }, config);
+  const response = await api.post('/api/questionnaire/' + 'submit', { answers }, config);
   return response.data;
 };
 

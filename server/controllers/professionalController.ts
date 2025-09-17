@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Professional from '../models/professionalModel.ts';
-import ConnectionRequest from '../models/connectionRequestModel.ts';
-import User, { IUser } from '../models/userModel.ts';
-import ResponseModel from '../models/responseModel.ts';
-import Question from '../models/questionnaireModel.ts';
+import Professional from '../models/professionalModel.js';
+import ConnectionRequest from '../models/connectionRequestModel.js';
+import User, { IUser } from '../models/userModel.js';
+import ResponseModel from '../models/responseModel.js';
+import Question from '../models/questionnaireModel.js';
 
 declare module 'express-serve-static-core' {
   interface Request {

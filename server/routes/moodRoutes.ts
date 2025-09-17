@@ -2,8 +2,8 @@ import express from 'express';
 import {
   createMoodEntry,
   getMyMoodEntries,
-} from '../controllers/moodController';
-import { protect } from '../middleware/authMiddleware';
+} from '../controllers/moodController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import User, { IUser } from '../models/userModel.ts';
+import User, { IUser } from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
-import generateToken from '../utils/generateToken.ts';
-import ResponseModel from '../models/responseModel.ts';
+import generateToken from '../utils/generateToken.js';
+import ResponseModel from '../models/responseModel.js';
 import { v4 as uuidv4 } from 'uuid';
 
 // @desc    Register a new user

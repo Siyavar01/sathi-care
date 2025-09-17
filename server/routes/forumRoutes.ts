@@ -4,8 +4,8 @@ import {
   getAllPosts,
   getPostById,
   createComment,
-} from '../controllers/forumController.ts';
-import { protect } from '../middleware/authMiddleware.ts';
+} from '../controllers/forumController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import MoodEntry from '../models/moodEntryModel.ts';
-import { IUser } from '../models/userModel.ts';
+import MoodEntry from '../models/moodEntryModel.js';
+import { IUser } from '../models/userModel.js';
 
 // @desc    Create a new mood entry
 // @route   POST /api/moods

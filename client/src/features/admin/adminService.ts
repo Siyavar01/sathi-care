@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = '/api/admin/';
+import api from '../../api/axiosConfig.js';
 
 const getUnverifiedProfessionals = async (token: string) => {
   const config = {
@@ -8,7 +6,7 @@ const getUnverifiedProfessionals = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(API_URL + 'unverified-professionals', config);
+  const response = await api.get('/api/admin/' + 'unverified-professionals', config);
   return response.data;
 };
 
@@ -18,9 +16,9 @@ const verifyProfessional = async (professionalId: string, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.put(
-    API_URL + `verify-professional/${professionalId}`,
-    {}, // No data needed in the body for this request
+  const response = await api.put(
+    '/api/admin/' + `verify-professional/${professionalId}`,
+    {},
     config
   );
   return response.data;
@@ -32,7 +30,7 @@ const getAllUsers = async (token: string) => {
             Authorization: `Bearer ${token}`,
         },
     };
-    const response = await axios.get(API_URL + 'users', config);
+    const response = await api.get('/api/admin/' + 'users', config);
     return response.data;
 }
 

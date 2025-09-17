@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = '/api/institutions/';
+import api from '../../api/axiosConfig.js';
 
 const createOrUpdateProfile = async (profileData: any, token: string) => {
   const config = {
@@ -8,7 +6,7 @@ const createOrUpdateProfile = async (profileData: any, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'profile', profileData, config);
+  const response = await api.post('/api/institutions/' + 'profile', profileData, config);
   return response.data;
 };
 
@@ -18,7 +16,7 @@ const getMyProfile = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(API_URL + 'profile/me', config);
+  const response = await api.get('/api/institutions/' + 'profile/me', config);
   return response.data;
 };
 
@@ -28,7 +26,7 @@ const createConnectionRequest = async (requestData: { professionalId: string; me
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'connect', requestData, config);
+  const response = await api.post('/api/institutions/' + 'connect', requestData, config);
   return response.data;
 };
 
@@ -38,7 +36,7 @@ const getMyConnectionRequests = async (token: string) => {
             Authorization: `Bearer ${token}`,
         },
     };
-    const response = await axios.get(API_URL + 'requests', config);
+    const response = await api.get('/api/institutions/' + 'requests', config);
     return response.data;
 }
 

@@ -1,5 +1,5 @@
 import { Schema, model, Document, Types } from 'mongoose';
-import { ISessionType } from './professionalModel.ts';
+import { ISessionType } from './professionalModel.js';
 
 export interface IAppointment extends Document {
   user: Types.ObjectId;

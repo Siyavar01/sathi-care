@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import User from '../models/userModel';
-import Professional from '../models/professionalModel';
+import User from '../models/userModel.js';
+import Professional from '../models/professionalModel.js';
 
 // @desc    Get all users
 // @route   GET /api/admin/users

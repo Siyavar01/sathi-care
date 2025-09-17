@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
-import generateToken from '../utils/generateToken.ts';
-import { IUser } from '../models/userModel.ts';
+import generateToken from '../utils/generateToken.js';
+import { IUser } from '../models/userModel.js';
 
 const router = express.Router();
 

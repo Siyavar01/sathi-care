@@ -3,21 +3,22 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import http from 'http';
 import { Server } from 'socket.io';
-import connectDB from './config/db.ts';
-import userRoutes from './routes/userRoutes.ts';
-import authRoutes from './routes/authRoutes.ts';
-import professionalRoutes from './routes/professionalRoutes.ts';
-import adminRoutes from './routes/adminRoutes.ts';
-import questionnaireRoutes from './routes/questionnaireRoutes.ts';
-import institutionRoutes from './routes/institutionRoutes.ts';
-import appointmentRoutes from './routes/appointmentRoutes.ts';
-import paymentRoutes from './routes/paymentRoutes.ts';
-import moodRoutes from './routes/moodRoutes.ts';
-import forumRoutes from './routes/forumRoutes.ts';
-import aiRoutes from './routes/aiRoutes.ts'
-import resourceRoutes from './routes/resourceRoutes.ts'
-import { errorHandler } from './middleware/errorMiddleware.ts';
-import './config/passport.ts';
+import cors from 'cors';
+import connectDB from './config/db.js';
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import professionalRoutes from './routes/professionalRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import questionnaireRoutes from './routes/questionnaireRoutes.js';
+import institutionRoutes from './routes/institutionRoutes.js';
+import appointmentRoutes from './routes/appointmentRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import moodRoutes from './routes/moodRoutes.js';
+import forumRoutes from './routes/forumRoutes.js';
+import aiRoutes from './routes/aiRoutes.js'
+import resourceRoutes from './routes/resourceRoutes.js'
+import { errorHandler } from './middleware/errorMiddleware.js';
+import './config/passport.js';
 
 dotenv.config();
 connectDB();
@@ -30,6 +31,12 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
   },
 });
+
+const corsOptions = {
+    origin: process.env.CLIENT_URL,
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(passport.initialize());

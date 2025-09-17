@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Appointment, { IAppointment } from '../models/appointmentModel.ts';
-import Professional from '../models/professionalModel.ts';
-import { IUser } from '../models/userModel.ts';
+import Appointment, { IAppointment } from '../models/appointmentModel.js';
+import Professional from '../models/professionalModel.js';
+import { IUser } from '../models/userModel.js';
 
 // @desc    Create a new appointment
 // @route   POST /api/appointments

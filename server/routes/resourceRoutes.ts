@@ -2,8 +2,8 @@ import express from 'express';
 import {
   createResource,
   getAllResources,
-} from '../controllers/resourceController.ts';
-import { protect, authorize } from '../middleware/authMiddleware.ts';
+} from '../controllers/resourceController.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Post from '../models/postModel.ts';
-import Comment from '../models/commentModel.ts';
-import { IUser } from '../models/userModel.ts';
-import { moderationService } from '../services/moderationService.ts';
+import Post from '../models/postModel.js';
+import Comment from '../models/commentModel.js';
+import { IUser } from '../models/userModel.js';
+import { moderationService } from '../services/moderationService.js';
 
 const checkAndFlagContent = async (type: 'post' | 'comment', id: string) => {
   try {

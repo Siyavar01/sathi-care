@@ -7,12 +7,12 @@ import {
   matchProfessionals,
   getIncomingConnectionRequests,
   updateConnectionRequestStatus,
-} from '../controllers/professionalController.ts';
+} from '../controllers/professionalController.js';
 import {
   uploadCredential,
   uploadProfilePicture,
-} from '../controllers/uploadController.ts';
-import { protect, authorize } from '../middleware/authMiddleware.ts';
+} from '../controllers/uploadController.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 import multer from 'multer';
 
 const router = express.Router();

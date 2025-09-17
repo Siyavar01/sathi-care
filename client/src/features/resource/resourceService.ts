@@ -1,10 +1,8 @@
-import axios from 'axios';
+import api from '../../api/axiosConfig.js';
 import type { IResource } from '../../types';
 
-const API_URL = '/api/resources/';
-
 const getAllResources = async (): Promise<IResource[]> => {
-  const response = await axios.get(API_URL);
+  const response = await api.get('/api/resources/');
   return response.data;
 };
 
@@ -14,7 +12,7 @@ const createResource = async (resourceData: Omit<IResource, '_id' | 'addedBy'>, 
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL, resourceData, config);
+  const response = await api.post('/api/resources/', resourceData, config);
   return response.data;
 };
 

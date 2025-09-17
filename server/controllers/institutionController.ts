@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import InstitutionProfile from '../models/institutionProfileModel.ts';
-import ConnectionRequest from '../models/connectionRequestModel.ts';
-import { IUser } from '../models/userModel.ts';
+import InstitutionProfile from '../models/institutionProfileModel.js';
+import ConnectionRequest from '../models/connectionRequestModel.js';
+import { IUser } from '../models/userModel.js';
 
 // @desc    Create or update an institution profile
 // @route   POST /api/institutions/profile

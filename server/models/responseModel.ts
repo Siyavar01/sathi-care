@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { IUser } from './userModel';
-import { IQuestion } from './questionnaireModel';
+import { IUser } from './userModel.js';
+import { IQuestion } from './questionnaireModel.js';
 
 export interface IResponse extends Document {
   user: IUser['_id'];

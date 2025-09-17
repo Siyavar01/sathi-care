@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { IUser } from '../models/userModel';
+import { IUser } from '../models/userModel.js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
-import Question from '../models/questionnaireModel.ts';
-import ResponseModel from '../models/responseModel.ts';
-import User, { IUser } from '../models/userModel.ts';
+import Question from '../models/questionnaireModel.js';
+import ResponseModel from '../models/responseModel.js';
+import User, { IUser } from '../models/userModel.js';
 import { v4 as uuidv4 } from 'uuid';
-import generateToken from '../utils/generateToken.ts';
+import generateToken from '../utils/generateToken.js';
 
 const getQuestions = asyncHandler(async (req: Request, res: Response) => {
   const questions = await Question.find({});

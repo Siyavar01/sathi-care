@@ -12,6 +12,8 @@ const LoginPage = () => {
 
   const { email, password } = formData;
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const googleAuthUrl = `${API_URL}/api/auth/google`;
 
   const { user, isLoading, isError, isSuccess, message, login, reset } =
     useAuthStore();
@@ -139,7 +141,7 @@ const LoginPage = () => {
 
         <div>
           <a
-            href="/api/auth/google"
+            href={googleAuthUrl}
             className="group relative flex w-full items-center justify-center rounded-lg border border-gray-300/50 bg-white px-4 py-3 text-lg font-semibold text-brand-charcoal shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-pastel-purple focus:ring-offset-2"
           >
             <svg

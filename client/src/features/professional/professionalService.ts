@@ -1,7 +1,4 @@
-import axios from 'axios';
-
-const API_URL = '/api/professionals/';
-const INSTITUTION_API_URL = '/api/institutions/';
+import api from '../../api/axiosConfig.js';
 
 const createOrUpdateProfile = async (profileData: any, token: string) => {
   const config = {
@@ -9,7 +6,7 @@ const createOrUpdateProfile = async (profileData: any, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'profile', profileData, config);
+  const response = await api.post('/api/professionals/' + 'profile', profileData, config);
   return response.data;
 };
 
@@ -19,7 +16,7 @@ const getMyProfile = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(API_URL + 'profile/me', config);
+  const response = await api.get('/api/professionals/' + 'profile/me', config);
   return response.data;
 };
 
@@ -32,12 +29,12 @@ const getAllProfessionals = async (filters: any) => {
   if (filters.languages) params.append('languages', filters.languages.join(','));
   if (filters.proBono) params.append('proBono', 'true');
 
-  const response = await axios.get(API_URL, { params });
+  const response = await api.get('/api/professionals/', { params });
   return response.data;
 };
 
 const getProfessionalById = async (id: string) => {
-  const response = await axios.get(API_URL + id);
+  const response = await api.get('/api/professionals/' + id);
   return response.data;
 };
 
@@ -47,7 +44,7 @@ const createConnectionRequest = async (requestData: { professionalId: string; me
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(INSTITUTION_API_URL + 'connect', requestData, config);
+  const response = await api.post('/api/institutions/' + 'connect', requestData, config);
   return response.data;
 };
 
@@ -62,8 +59,8 @@ const uploadProfilePicture = async (file: File, token: string) => {
     },
   };
 
-  const response = await axios.post(
-    API_URL + 'profile/upload-picture',
+  const response = await api.post(
+    '/api/professionals/' + 'profile/upload-picture',
     formData,
     config
   );
@@ -85,8 +82,8 @@ const uploadCredential = async (
     },
   };
 
-  const response = await axios.post(
-    API_URL + 'credentials/upload',
+  const response = await api.post(
+    '/api/professionals/' + 'credentials/upload',
     formData,
     config
   );
@@ -97,7 +94,7 @@ const getIncomingConnectionRequests = async (token: string) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  const response = await axios.get(API_URL + 'requests/incoming', config);
+  const response = await api.get('/api/professionals/' + 'requests/incoming', config);
   return response.data;
 };
 
@@ -105,7 +102,7 @@ const updateConnectionRequestStatus = async (requestId: string, status: 'accepte
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
-  const response = await axios.put(API_URL + `requests/${requestId}`, { status }, config);
+  const response = await api.put('/api/professionals/' + `requests/${requestId}`, { status }, config);
   return response.data;
 };
 
@@ -113,7 +110,7 @@ const matchProfessionals = async (submissionId: string, token: string) => {
     const config = {
         headers: { Authorization: `Bearer ${token}` },
     };
-    const response = await axios.post(API_URL + 'match', { submissionId }, config);
+    const response = await api.post('/api/professionals/' + 'match', { submissionId }, config);
     return response.data;
 }
 

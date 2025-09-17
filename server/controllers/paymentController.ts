@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
-import { IUser } from '../models/userModel.ts';
-import Appointment from '../models/appointmentModel.ts';
+import { IUser } from '../models/userModel.js';
+import Appointment from '../models/appointmentModel.js';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,

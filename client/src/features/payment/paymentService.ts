@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = '/api/payments/';
+import api from '../../api/axiosConfig.js';
 
 const createOrder = async (orderData: { amount: number }, token: string) => {
   const config = {
@@ -8,7 +6,7 @@ const createOrder = async (orderData: { amount: number }, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'orders', orderData, config);
+  const response = await api.post('/api/payments/' + 'orders', orderData, config);
   return response.data;
 };
 
@@ -18,7 +16,7 @@ const verifyAndBookAppointment = async (paymentData: any, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.post(API_URL + 'verify-and-book', paymentData, config);
+  const response = await api.post('/api/payments/' + 'verify-and-book', paymentData, config);
   return response.data;
 };
 

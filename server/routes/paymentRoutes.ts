@@ -2,8 +2,8 @@ import express from 'express';
 import {
   createOrder,
   verifyAndBookAppointment,
-} from '../controllers/paymentController.ts';
-import { protect } from '../middleware/authMiddleware.ts';
+} from '../controllers/paymentController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

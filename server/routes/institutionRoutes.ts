@@ -4,8 +4,8 @@ import {
   getMyInstitutionProfile,
   createConnectionRequest,
   getMyConnectionRequests,
-} from '../controllers/institutionController.ts';
-import { protect, authorize } from '../middleware/authMiddleware.ts';
+} from '../controllers/institutionController.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
